@@ -7,11 +7,11 @@ import { Job } from "@prisma/client";
 // The `searchParams` prop is not a promise, it's a direct object.
 // This is the correct signature.
 type JobPageProps = {
-  searchParams: {
+  searchParams: Promise<{
     q?: string;
     type?: string;
     location?: string;
-  };
+  }>;
 };
 
 export default async function JobsPage({ searchParams }: JobPageProps) {
