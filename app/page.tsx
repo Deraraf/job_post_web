@@ -1,102 +1,180 @@
-import Image from "next/image";
+import { prisma } from "@/lib/prisma";
+import Link from "next/link";
+import { ArrowRight, Briefcase, Zap } from "lucide-react";
+import JobListItem from "@/components/jobs/JobListItem";
 
-export default function Home() {
+export default async function HomePage() {
+  const recentJobs = await prisma.job.findMany({
+    orderBy: {
+      postedAt: "desc",
+    },
+    take: 4,
+  });
+
   return (
-    <div className="grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20 font-[family-name:var(--font-geist-sans)]">
-      <main className="flex flex-col gap-[32px] row-start-2 items-center sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={180}
-          height={38}
-          priority
-        />
-        <ol className="list-inside list-decimal text-sm/6 text-center sm:text-left font-[family-name:var(--font-geist-mono)]">
-          <li className="mb-2 tracking-[-.01em]">
-            Get started by editing{" "}
-            <code className="bg-black/[.05] dark:bg-white/[.06] px-1 py-0.5 rounded font-[family-name:var(--font-geist-mono)] font-semibold">
-              app/page.tsx
-            </code>
-            .
-          </li>
-          <li className="tracking-[-.01em]">
-            Save and see your changes instantly.
-          </li>
-        </ol>
-
-        <div className="flex gap-4 items-center flex-col sm:flex-row">
-          <a
-            className="rounded-full border border-solid border-transparent transition-colors flex items-center justify-center bg-foreground text-background gap-2 hover:bg-[#383838] dark:hover:bg-[#ccc] font-medium text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 sm:w-auto"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={20}
-              height={20}
-            />
-            Deploy now
-          </a>
-          <a
-            className="rounded-full border border-solid border-black/[.08] dark:border-white/[.145] transition-colors flex items-center justify-center hover:bg-[#f2f2f2] dark:hover:bg-[#1a1a1a] hover:border-transparent font-medium text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 w-full sm:w-auto md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Read our docs
-          </a>
+    <div className="min-h-screen dark:bg-slate-900 text-black dark:text-white">
+      {/* Hero Section */}
+      <section className="py-20 sm:py-28 text-center bg-gradient-to-b from-slate-900 to-slate-800/50">
+        <div className="max-w-4xl mx-auto px-4">
+          <h1 className="text-4xl sm:text-5xl md:text-6xl font-extrabold tracking-tight text-white">
+            Find Your Next <span className="text-blue-400">Tech Role</span>{" "}
+            Today
+          </h1>
+          <p className="mt-4 text-lg sm:text-xl text-black max-w-2xl mx-auto dark:text-white">
+            The best place for developers, designers, and tech professionals to
+            discover new opportunities.
+          </p>
+          <div className="mt-8 flex justify-center">
+            <form action="/jobs" method="GET" className="w-full max-w-xl">
+              <div className="flex flex-col sm:flex-row gap-2">
+                <input
+                  type="text"
+                  name="q"
+                  placeholder="Search for 'React', 'Node.js', 'Designer'..."
+                  className="flex-grow px-4 py-3 bg-slate-600 border border-slate-700 rounded-md focus:ring-2 focus:outline-none focus:ring-blue-500 text-white"
+                />
+                <button
+                  type="submit"
+                  className="bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-6 rounded-md transition-colors flex items-center justify-center gap-2"
+                >
+                  Search Jobs <ArrowRight size={20} />
+                </button>
+              </div>
+            </form>
+          </div>
         </div>
-      </main>
-      <footer className="row-start-3 flex gap-[24px] flex-wrap items-center justify-center">
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/file.svg"
-            alt="File icon"
-            width={16}
-            height={16}
-          />
-          Learn
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/window.svg"
-            alt="Window icon"
-            width={16}
-            height={16}
-          />
-          Examples
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/globe.svg"
-            alt="Globe icon"
-            width={16}
-            height={16}
-          />
-          Go to nextjs.org →
-        </a>
+      </section>
+
+      {/* Why Us? Section */}
+      <section className="py-16 dark:bg-slate-900 text-black dark:text-white">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="text-center">
+            <h2 className="text-3xl font-bold tracking-tight">Why Jobify?</h2>
+            <p className="mt-2 text-lg text-gray-400">
+              Simple, fast, and direct connections.
+            </p>
+          </div>
+          <div className="mt-12 grid grid-cols-1 md:grid-cols-3 gap-8">
+            <div className="dark:bg-slate-800 p-8 rounded-lg text-center text-black dark:text-white">
+              <Zap className="mx-auto h-12 w-12 text-blue-400" />
+              <h3 className="mt-6 text-xl font-semibold">
+                Direct Applications
+              </h3>
+              <p className="mt-2 text-white shadow-lg">
+                No third-party sites. Apply directly to companies and get
+                noticed faster.
+              </p>
+            </div>
+            <div className="dark:bg-slate-800 p-8 rounded-lg text-center text-black dark:text-white">
+              <Briefcase className="mx-auto h-12 w-12 text-blue-400" />
+              <h3 className="mt-6 text-xl font-semibold">Curated Tech Roles</h3>
+              <p className="mt-2 text-white shadow-lg">
+                We focus exclusively on roles in the tech industry, from
+                startups to enterprise.
+              </p>
+            </div>
+            <div className="dark:bg-slate-800 p-8 rounded-lg text-center text-black dark:text-white">
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                className="mx-auto h-12 w-12 text-blue-400"
+                width="24"
+                height="24"
+                viewBox="0 0 24 24"
+                strokeWidth="2"
+                stroke="currentColor"
+                fill="none"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+              >
+                <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+                <path d="M12 12m-9 0a9 9 0 1 0 18 0a9 9 0 1 0 -18 0" />
+                <path d="M12 12m-3 0a3 3 0 1 0 6 0a3 3 0 1 0 -6 0" />
+                <path d="M6.168 18.849a4 4 0 0 1 3.832 -2.849h4a4 4 0 0 1 3.834 2.855" />
+              </svg>
+              <h3 className="mt-6 text-xl font-semibold">
+                For Recruiters & Seekers
+              </h3>
+              <p className="mt-2 text-white shadow-lg">
+                A simple, powerful dashboard for both sides of the hiring
+                process.
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Featured Jobs Section */}
+      {recentJobs.length > 0 && (
+        <section className="py-4 bg-slate-800/50 mb-4">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div className="text-center pb-4">
+              <h2 className="text-3xl font-bold tracking-tight text-white">
+                Latest Job Openings
+              </h2>
+              <p className="mt-2 text-lg text-white shadow-lg pb-4">
+                Be the first to apply to these fresh opportunities.
+              </p>
+            </div>
+            <div className="mt-12 space-y-6">
+              {recentJobs.map((job) => (
+                <JobListItem key={job.id} job={job} />
+              ))}
+            </div>
+            <div className="mt-12 text-center">
+              <Link
+                href="/jobs"
+                className="inline-flex items-center gap-2 bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-6 rounded-md transition-colors"
+              >
+                Browse All Jobs <ArrowRight size={20} />
+              </Link>
+            </div>
+          </div>
+        </section>
+      )}
+
+      {/* Call to Action Banners */}
+      <section className="py-20 dark:bg-slate-900 text-black dark:text-white">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+            {/* For Employers */}
+            <div className="dark:bg-slate-800 p-10 rounded-lg text-center flex flex-col items-center text-black dark:text-white shadow-lg">
+              <h2 className="text-2xl font-bold">Hiring for a Role?</h2>
+              <p className="mt-2 text-black dark:text-white max-w-sm">
+                Post your job in minutes and reach thousands of qualified tech
+                professionals ready to join your team.
+              </p>
+              <Link
+                href="/jobs/posts"
+                className="mt-6 inline-block bg-white hover:bg-gray-200 text-slate-900 font-bold py-3 px-6 rounded-md transition-colors"
+              >
+                Post a Job for Free
+              </Link>
+            </div>
+            {/* For Job Seekers */}
+            <div className="bg-blue-600 p-10 rounded-lg text-center flex flex-col items-center text-white shadow-lg">
+              <h2 className="text-2xl font-bold">
+                Ready to Find Your Dream Job?
+              </h2>
+              <p className="mt-2 dark:text-blue-100 max-w-sm text-black">
+                Create an account to manage your applications and get
+                personalized job alerts.
+              </p>
+              <Link
+                href="/dashboard"
+                className="mt-6 inline-block bg-white hover:bg-gray-200 text-blue-600 font-bold py-3 px-6 rounded-md transition-colors"
+              >
+                Go to Your Dashboard
+              </Link>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Footer */}
+      <footer className="dark:bg-slate-800 border-t border-slate-700 shadow-lg text-black dark:text-white">
+        <div className="max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8 text-center text-black dark:text-white text-sm">
+          <p>© {new Date().getFullYear()} Jobify. All rights reserved.</p>
+        </div>
       </footer>
     </div>
   );
