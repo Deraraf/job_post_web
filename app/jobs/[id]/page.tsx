@@ -6,8 +6,8 @@ import TimeAgo from "@/components/TimeAgo";
 import ApplyButton from "./ApplyButton"; // Assuming ApplyButton is in the same folder or adjust path
 import { Briefcase, MapPin, DollarSign, Clock, ArrowLeft } from "lucide-react";
 
-const JobPage = async ({ params }: { params: { id: string } }) => {
-  const { id } = params;
+const JobPage = async ({ params }: { params: Promise<{ id: string }> }) => {
+  const { id } = await params;
 
   const job = await prisma.job.findUnique({
     where: { id },
